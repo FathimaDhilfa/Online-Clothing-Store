@@ -1,0 +1,450 @@
+
+.account-page {
+  min-height: 100vh;
+  background: #f8f6f2;
+  color: #292722;
+  font-family: Arial, sans-serif;
+}
+
+.account-header {
+  height: 85px;
+  padding: 0 7%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eeeae3;
+}
+
+.account-logo {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  letter-spacing: 3px;
+  color: #25231f;
+  text-decoration: none;
+}
+
+.account-logo span {
+  color: #b59a78;
+}
+
+.back-to-store {
+  color: #514b42;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.account-layout {
+  max-width: 1250px;
+  margin: 55px auto;
+  padding: 0 25px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 35px;
+}
+
+.account-sidebar {
+  background: #fff;
+  padding: 30px 22px;
+  border: 1px solid #eeeae3;
+  align-self: start;
+}
+
+.account-user {
+  text-align: center;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #eeeae3;
+}
+
+.account-avatar {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: #eee6da;
+  color: #79654d;
+  display: grid;
+  place-items: center;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  margin: 0 auto 15px;
+}
+
+.account-user h3 {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  overflow-wrap: anywhere;
+}
+
+.account-user p {
+  font-size: 12px;
+  color: #888076;
+  overflow-wrap: anywhere;
+}
+
+.menu-heading {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #a18e75;
+  margin: 27px 0 15px;
+}
+
+.account-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.account-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 12px;
+  background: transparent;
+  border: none;
+  color: #68635b;
+  text-decoration: none;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+
+.account-menu-item span {
+  font-size: 19px;
+  width: 20px;
+  text-align: center;
+}
+
+.account-menu-item:hover,
+.account-menu-item.active {
+  background: #f5f1eb;
+  color: #8c7050;
+}
+
+.account-logout {
+  margin-top: 30px;
+  padding: 13px;
+  width: 100%;
+  border: 1px solid #e8e1d8;
+  background: white;
+  color: #8a6e54;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.account-logout:hover {
+  background: #292722;
+  color: #fff;
+}
+
+.account-content {
+  background: #fff;
+  border: 1px solid #eeeae3;
+  padding: 45px;
+  min-height: 550px;
+}
+
+.account-eyebrow {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #a18e75;
+  margin-bottom: 17px;
+}
+
+.account-content > h1 {
+  font-family: Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+  margin-bottom: 13px;
+}
+
+.account-intro {
+  color: #888076;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.account-welcome-banner {
+  padding: 42px;
+  background: #eee8de;
+  margin: 30px 0 40px;
+}
+
+.account-welcome-banner > p {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #89745a;
+  margin-bottom: 17px;
+}
+
+.account-welcome-banner h2 {
+  font-family: Georgia, serif;
+  font-size: 34px;
+  line-height: 1.35;
+  font-weight: 400;
+  color: #302c26;
+  margin-bottom: 25px;
+}
+
+.account-shop-button {
+  display: inline-block;
+  padding: 14px 22px;
+  background: #292722;
+  color: white;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+}
+
+.account-section-title {
+  font-family: Georgia, serif;
+  font-size: 23px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.account-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.account-info-card {
+  padding: 22px 16px;
+  background: #fff;
+  border: 1px solid #eeeae3;
+  text-align: left;
+  text-decoration: none;
+  color: #302c26;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.account-info-card > span {
+  font-size: 25px;
+  color: #a18e75;
+}
+
+.account-info-card h3 {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-weight: 400;
+  margin: 15px 0 8px;
+}
+
+.account-info-card p {
+  color: #888076;
+  font-size: 11px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.account-info-card strong {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #9a8060;
+}
+
+.account-info-card:hover {
+  border-color: #bba58a;
+}
+
+.profile-details {
+  border: 1px solid #eeeae3;
+  margin-top: 30px;
+}
+
+.profile-details > div {
+  padding: 23px;
+  border-bottom: 1px solid #eeeae3;
+}
+
+.profile-details > div:last-child {
+  border-bottom: none;
+}
+
+.profile-details label {
+  color: #a18e75;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.profile-details p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.profile-note {
+  color: #888076;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 25px;
+}
+
+.account-footer {
+  text-align: center;
+  padding: 25px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #928879;
+}
+
+@media (max-width: 850px) {
+  .account-layout {
+    grid-template-columns: 1fr;
+    margin: 25px auto;
+  }
+
+  .account-sidebar {
+    width: 100%;
+  }
+
+  .account-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .account-content {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 550px) {
+  .account-header {
+    padding: 0 5%;
+    height: 70px;
+  }
+
+  .account-logo {
+    font-size: 24px;
+  }
+
+  .back-to-store {
+    font-size: 11px;
+  }
+
+  .account-layout {
+    padding: 0 13px;
+    gap: 18px;
+  }
+
+  .account-content {
+    padding: 22px 17px;
+  }
+
+  .account-content > h1 {
+    font-size: 27px;
+  }
+
+  .account-welcome-banner {
+    padding: 25px 20px;
+  }
+
+  .account-welcome-banner h2 {
+    font-size: 27px;
+  }
+
+  .account-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .account-menu {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-details p {
+  overflow-wrap: anywhere;
+}
+
+
+.customer-order-card {
+  border: 1px solid #eeeae3;
+  padding: 24px;
+  margin-top: 22px;
+  background: #fff;
+}
+
+.customer-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.customer-order-header p {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #a18e75;
+  margin-bottom: 8px;
+}
+
+.customer-order-header strong {
+  font-size: 13px;
+}
+
+.customer-order-status {
+  background: #f5f1eb;
+  color: #8c7050;
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+.customer-order-date {
+  font-size: 12px;
+  color: #888076;
+  margin: 18px 0;
+}
+
+.customer-order-products {
+  border-top: 1px solid #eeeae3;
+}
+
+.customer-order-product {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #eeeae3;
+}
+
+.customer-order-product img {
+  width: 65px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.customer-order-product div {
+  flex: 1;
+}
+
+.customer-order-product h3 {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.customer-order-product p {
+  font-size: 11px;
+  color: #888076;
+  margin-top: 5px;
+}
+
+.customer-order-product strong {
+  font-size: 12px;
+}
+
+.customer-order-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 18px;
+  font-size: 12px;
+}
