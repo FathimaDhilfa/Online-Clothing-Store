@@ -1,4 +1,6 @@
+
 import './App.css';
+import AdminProducts from './admin/AdminProducts';
 import Home from './Pages/Home';
 import ProductDetails from './Pages/ProductDetails';
 import Cart from './Pages/Cart';
@@ -7,75 +9,93 @@ import Checkout from './Pages/Checkout';
 import OrderSuccess from './Pages/OrderSuccess';
 import CategoryProducts from './Pages/CategoryProducts';
 import Login from './Pages/Login';
-import Footer from './Components/Footer';
 import Signup from './Pages/Signup';
 import Account from './Pages/Account';
-import { AuthProvider } from './context/AuthContext';
 import SearchResults from './Pages/SearchResults';
+
+import Footer from './Components/Footer';
+import ScrollToTop from './Components/ScrollToTop';
+
+import AdminLogin from './admin/AdminLogin';
+import AdminDashboard from './admin/AdminDashboard';
+
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  useLocation
 } from 'react-router-dom';
 
-import { CartProvider } from './context/CartContext';
+function AppContent() {
+  const location = useLocation();
 
-function App() {
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
+    <>
+      <ScrollToTop />
+
+      <AuthProvider>
+        <CartProvider>
+
+          <Routes>
+
+            {/* Storefront Routes */}
+            <Route path="/" element={<Home />} />
+
+            <Route
+              path="/products/category/:slug"
+              element={<CategoryProducts />}
+            />
+
+            <Route
+              path="/product/:id"
+              element={<ProductDetails />}
+            />
+
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-success" element={<OrderSuccess />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/search" element={<SearchResults />} />
+
+            {/* Admin Routes */}
+            <Route
+              path="/admin/login"
+              element={<AdminLogin />}
+            />
+
+            <Route
+              path="/admin/dashboard"
+              element={<AdminDashboard />}
+              
+            />
+<Route
+  path="/admin/products"
+  element={<AdminProducts />}
+/>
+          </Routes>
+
+          {/* Footer only appears on storefront pages */}
+          {!isAdminRoute && <Footer />}
+
+        </CartProvider>
+      </AuthProvider>
+    </>
+  );
+}
+
+function App() {
+  return (
     <BrowserRouter>
-  <AuthProvider>
-    <CartProvider>
-
-        <Routes>
-
-          <Route path="/" element={<Home />} />
-
-          <Route
-            path="/products/category/:slug"
-            element={<CategoryProducts />}
-          />
-
-          <Route
-            path="/product/:id"
-            element={<ProductDetails />}
-          />
-
-          <Route
-            path="/cart"
-            element={<Cart />}
-          />
-
-          <Route
-            path="/wishlist"
-            element={<Wishlist />}
-          />
-
-          <Route
-            path="/checkout"
-            element={<Checkout />}
-          />
-
-          <Route
-            path="/order-success"
-            element={<OrderSuccess />}
-          />
-
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/search" element={<SearchResults />} />
-
-        </Routes>
-
-        <Footer />
-
-      </CartProvider>
-  </AuthProvider>
-</BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

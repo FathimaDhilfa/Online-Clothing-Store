@@ -19,7 +19,8 @@ const jwt = require('jsonwebtoken');
 const Customer = require('./models/Customer');
 const Order = require('./models/Order');
 
-
+const Product = require('./models/Product');
+const Admin = require('./models/Admin');
 // ========================================
 // 3. CREATE EXPRESS APPLICATION
 // ========================================
@@ -70,6 +71,55 @@ const verifyToken = (req, res, next) => {
 
 
 // ========================================
+// ADMIN AUTHENTICATION MIDDLEWARE
+// ========================================
+
+const verifyAdminToken = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        message: 'Admin authentication required.'
+      });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== 'admin' || !decoded.adminId) {
+      return res.status(403).json({
+        success: false,
+        message: 'Admin access denied.'
+      });
+    }
+
+    const admin = await Admin.findById(decoded.adminId);
+
+    if (!admin) {
+      return res.status(401).json({
+        success: false,
+        message: 'Admin account not found.'
+      });
+    }
+
+    req.adminId = admin._id;
+
+    next();
+
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid or expired admin session.'
+    });
+  }
+};
+
+
+
+// ========================================
 // 5. HOME API
 // ========================================
 
@@ -87,19 +137,191 @@ app.get('/about', (req, res) => {
 });
 
 
-// ========================================
-// 7. PRODUCTS API
-// ========================================
 
-app.get('/products', (req, res) => {
-  res.json({
-    success: true,
-    products: [
-      'Luxury Co-ord set',
-      'Elegant White Top',
-      'Classic Denim Jeans'
-    ]
-  });
+/* ========================================
+   PRODUCT MANAGEMENT APIs
+======================================== */
+
+// GET ALL ACTIVE PRODUCTS
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find({
+      isActive: true
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: products.length,
+      products
+    });
+
+  } catch (error) {
+    console.error('Fetch products error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to retrieve products.'
+    });
+  }
+});
+
+
+// GET SINGLE PRODUCT
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findOne({
+      _id: req.params.id,
+      isActive: true
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found.'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      product
+    });
+
+  } catch (error) {
+    console.error('Fetch product error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to retrieve product.'
+    });
+  }
+});
+
+
+// ADD NEW PRODUCT
+app.post('/api/products', verifyAdminToken, async (req, res) => {
+  try {
+    const {
+      name,
+      category,
+      price,
+      originalPrice,
+      description,
+      images,
+      sizes,
+      colors,
+      stock,
+      label
+    } = req.body;
+
+    if (
+      typeof name !== 'string' || !name.trim() ||
+      typeof category !== 'string' || !category.trim() ||
+      typeof description !== 'string' || !description.trim() ||
+      !Number.isFinite(price) || price < 0 ||
+      !Array.isArray(images) ||
+      !Array.isArray(sizes) ||
+      !Array.isArray(colors) ||
+      !Number.isInteger(stock) || stock < 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide valid product information.'
+      });
+    }
+
+    const product = await Product.create({
+      name: name.trim(),
+      category: category.trim(),
+      price,
+      originalPrice,
+      description: description.trim(),
+      images,
+      sizes,
+      colors,
+      stock,
+      label
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Product added successfully!',
+      product
+    });
+
+  } catch (error) {
+    console.error('Add product error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to add product.'
+    });
+  }
+});
+
+
+// UPDATE PRODUCT
+app.put('/api/products/:id', verifyAdminToken, async (req, res) => {
+  try {
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found.'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Product updated successfully!',
+      product
+    });
+
+  } catch (error) {
+    console.error('Update product error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to update product.'
+    });
+  }
+});
+
+
+// DELETE PRODUCT
+app.delete('/api/products/:id', verifyAdminToken, async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(
+      req.params.id
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found.'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully!'
+    });
+
+  } catch (error) {
+    console.error('Delete product error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to delete product.'
+    });
+  }
 });
 
 
@@ -309,6 +531,145 @@ app.post('/api/auth/login', async (req, res) => {
 
   }
 
+});
+
+
+// ========================================
+// ADMIN LOGIN API
+// ========================================
+
+app.post('/api/admin/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !email.trim() ||
+      !password
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required.'
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const admin = await Admin.findOne({
+      email: normalizedEmail
+    });
+
+    if (!admin) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid admin email or password.'
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      admin.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid admin email or password.'
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        adminId: admin._id,
+        role: 'admin'
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1d'
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Admin login successful!',
+      token,
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role
+      }
+    });
+
+  } catch (error) {
+    console.error('Admin login error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during admin login.'
+    });
+  }
+});
+
+
+// ========================================
+// ADMIN DASHBOARD STATISTICS API
+// ========================================
+
+app.get('/api/admin/dashboard-stats', verifyAdminToken, async (req, res) => {
+  try {
+    const [
+      totalProducts,
+      totalOrders,
+      totalCustomers,
+      salesResult
+    ] = await Promise.all([
+
+      Product.countDocuments({ isActive: true }),
+
+      Order.countDocuments(),
+
+      Customer.countDocuments(),
+
+      Order.aggregate([
+        {
+          $match: {
+            status: 'Delivered'
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalSales: { $sum: '$totalAmount' }
+          }
+        }
+      ])
+
+    ]);
+
+    const totalSales = salesResult.length > 0
+      ? salesResult[0].totalSales
+      : 0;
+
+    return res.status(200).json({
+      success: true,
+      stats: {
+        totalProducts,
+        totalOrders,
+        totalCustomers,
+        totalSales
+      }
+    });
+
+  } catch (error) {
+    console.error('Dashboard statistics error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to retrieve dashboard statistics.'
+    });
+  }
 });
 
 
